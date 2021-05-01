@@ -152,15 +152,13 @@ source /usr/local/miriad/MIRRC.sh
 #alias kmodel-spiral="/usr/local/karma/amd64_Linux_libc6.3/bin/./kmodel-spiral"
 
 
-export NASA_API_KEY='cVnFafN4KxG9GJslLZpMwpqnw8WEtqum7S2fgdK3'
+# export PATH=$PATH:~/bin
 
-export PATH=$PATH:~/bin
+# export PYTHONPATH=$PYTHONPATH:~/Potential_solver/:~/bin/python/:~/disk_model3:/home/ckm/pypip-conda/
 
-export PYTHONPATH=$PYTHONPATH:~/Potential_solver/:~/bin/python/:~/disk_model3:/home/ckm/pypip-conda/
+# export PATH=$PATH:$KARMABINPATH
 
-export PATH=$PATH:$KARMABINPATH
-
-alias carta='~/Downloads/CARTA.AppImage'
+# alias carta='~/Downloads/CARTA.AppImage'
 
 alias radio='cd ~/Documents/school/radio-research'
 
