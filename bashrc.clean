@@ -1,0 +1,429 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=100000
+HISTFILESIZE=200000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+#[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	# We have color support; assume it's compliant with Ecma-48
+	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+	# a case would tend to support setf rather than setaf.)
+	color_prompt=yes
+    else
+	color_prompt=no
+    fi
+fi
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    alias dir='dir --color=auto'
+    alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+    # add -R for handling pipes
+fi
+
+# colored GCC warnings and errors
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+export PGPLOT_DIR='/usr/local/pgplot'
+
+# some more ls aliases
+#alias ll='ls -alF'
+#alias la='ls -A'
+#alias l='ls -CF'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+#alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+
+export PATH=$PATH:"/home/ckm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/miriad:/usr/local/miriad/linux64/bin:/usr/local/miriad/linux64:/home/ckm/bin:/usr/local/karma/amd64_Linux_libc6.3/bin/"
+
+source /usr/local/miriad/MIRRC.sh
+
+# libraries for compilation
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/miriad/linux64/lib:/usr/local/miriad/linux64/lib:/usr/local/karma/amd64_Linux_libc6.3/lib/:/usr/local/pgplot/"
+
+# export KARMALIBPATH="/usr/local/karma/amd64_Linux_libc6.3/lib/"
+# export KARMAINCLUDEPATH="/usr/local/karma/amd64_Linux_libc6.3/include/"
+# export KARMABASE="/usr/local/karma/amd64_Linux_libc6.3/"
+# export KARMASTATICLIBPATH="/usr/local/karma/amd64_Linux_libc6.3/static-lib/"
+# export KARMAROOT="/usr/local/karma/"
+# export KARMABINPATH="/usr/local/karma/amd64_Linux_libc6.3/bin/"
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH=:"/usr/local/miriad/linux64/lib:/usr/local/karma/amd64_Linux_libc6.3/lib/":$KARMALIBPATH
+
+# enviroment variables for karma install
+#export MACHINE_OS=amd64_Linux
+#export OS=Linux
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/karma/amd64_Linux_libc6.3/lib/
+#export KARMAROOT=/usr/local/eso/karma
+#export KARMABASE=$KARMAROOT/amd64_Linux
+#source /usr/local/karma/.karmarc\
+    
+# back up way to run karma tasks
+#alias kvis="/usr/local/karma/amd64_Linux_libc6.3/bin/./kvis"
+#alias kshell="/usr/local/karma/amd64_Linux_libc6.3/bin/./kshell"
+#alias kpvslice="/usr/local/karma/amd64_Linux_libc6.3/bin/./kpvslice"
+#alias kregrid="/usr/local/karma/amd64_Linux_libc6.3/bin/./kregrid"
+#alias xray="/usr/local/karma/amd64_Linux_libc6.3/bin/./xray"
+#alias kmodel-spiral="/usr/local/karma/amd64_Linux_libc6.3/bin/./kmodel-spiral"
+
+
+export NASA_API_KEY='cVnFafN4KxG9GJslLZpMwpqnw8WEtqum7S2fgdK3'
+
+export PATH=$PATH:~/bin
+
+export PYTHONPATH=$PYTHONPATH:~/Potential_solver/:~/bin/python/:~/disk_model3:/home/ckm/pypip-conda/
+
+export PATH=$PATH:$KARMABINPATH
+
+alias carta='~/Downloads/CARTA.AppImage'
+
+alias radio='cd ~/Documents/school/radio-research'
+
+alias school='cd ~/Documents/school/'
+
+alias installed='cat /var/log/dpkg.log | grep installed'
+
+alias ar='cd /media/ckm/archive'
+
+alias rl='cd /home/ckm/Documents/school/radio-lab'
+
+alias lsd='ls -alhF | grep /'
+
+alias lss='ls -alh'
+
+#alias condai='conda install -c conda-forge'
+#alias condad='conda deactiveate'
+#alias start='conda activate'
+
+# debian aliases
+alias install='sudo apt-get install'
+alias update='sudo apt-get update'
+alias upgrade='sudo apt-get upgrade'
+alias remove='sudo apt-get remove'
+alias purge='sudo apt-get purge'
+alias autoremove='sudo apt-get autoremove'
+alias dpkg='sudo dpkg'
+alias aptlist='apt list --installed'
+alias search='apt search'
+alias searchfiles='apt-file search'
+
+alias wget_file='/home/ckm/scripts/wget.pipe.sh '
+
+alias wgets='/home/ckm/scripts/wget.py '
+
+alias sbash='source ~/.bashrc'
+
+alias astroactivate='source ~/astro/bin/activate'
+
+alias jnb2html='/home/ckm/latex_envs/conversion/ipynb_thms_to_html'
+
+alias jnb2tex='jupyter nbconvert --to pdf --LatexPreprocessor.style=manni'
+
+# more alias
+alias list='ls -al --color=always $@ | sort -k9,9'
+
+# if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
+#         source /etc/profile.d/vte.sh
+# fi
+
+# disable capslock
+setxkbmap -option ctrl:nocaps
+
+## some shopt options ##
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+# correct minor spelling errors in cd
+shopt -s cdspell
+#include dotfiles in wildcard expansion, and match case-insensitively
+shopt -s dotglob
+# Case-insensitive globbing (used in pathname expansion)
+shopt -s nocaseglob
+
+
+# Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
+[ -e "$HOME/.ssh/config" ] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2)" scp sftp ssh
+
+
+#### SAFETY ####
+#alias rm='rm -Iv --preserve-root'
+#alias mv='mv -iv'
+#alias cp='cp -iv'
+#alias ln='ln -i'
+#alias chown='chown --preserve-root'
+#alias chmod='chmod --preserve-root'
+#alias chgrp='chgrp --preserve-root'
+
+# Alias's to show disk space and space used in a folder
+alias diskspace="du -S | sort -n -r |more"
+alias folders='du -h --max-depth=1'
+alias folderssort='find . -maxdepth 1 -type d -print0 | xargs -0 du -sk | sort -rn'
+alias treedir='tree -CAhF --dirsfirst'
+alias treed='tree -CAFd'
+alias mountedinfo='df -hT'
+
+
+#alias ippr='ipython --auto-indent -log
+
+alias gvim='gvim'
+
+# Search command line history
+# alias h="history | grep "	
+
+# Search running processes
+# alias p="ps aux | grep "
+alias topcpu="/bin/ps -eo pcpu,pid,user,args | sort -k 1 -r | head -10"
+
+# Search files in the current folder
+# alias f="find . | grep "
+
+# Count all files (recursively) in the current folder
+alias countfiles="for t in files links directories; do echo \`find . -type \${t:0:1} | wc -l\` \$t; done 2> /dev/null"
+
+# Color for manpages in less makes manpages a little easier to read
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
+
+
+# Causes bash to append to history instead of overwriting it so if you start a new terminal, you have old session history
+shopt -s histappend
+PROMPT_COMMAND='history -a'
+
+# Ignore case on auto-completion
+# Note: bind used instead of sticking these in .inputrc
+if [[ $iatest > 0 ]]; then bind "set completion-ignore-case on"; fi
+
+# Show auto-completion list automatically, without double tab
+if [[ $iatest > 0 ]]; then bind "set show-all-if-ambiguous On"; fi
+
+
+# keep less stuff on screen in terminal
+# https://shallowsky.com/linux/noaltscreen.html
+
+export LESS="-X"
+
+
+
+alias lynx='lynx -accept_all_cookies -cookie_file=/dev/null'
+
+alias bxarg='/home/ckm/scripts/batch_xargs_flist_cmd.sh '
+
+alias bpar='/home/ckm/scripts/batch_parallel_flist_cmd.sh '
+
+alias mdm='mdm.screen -c /home/ckm/scripts/iocpt ' # needs more stuff
+
+alias dpl='/home/ckm/scripts/dpkgList.sh '
+
+alias sysd_config='kcmshell5 kcm_systemd'
+
+alias apthash='apt-cache rdepends '
+
+alias punits='systemctl --type service --state running'
+
+fhelp ()
+{
+    local f=$1
+    ffmpeg -h filter=$f | prism -l powerquery
+}
+
+
+alias fbf="ls -alSrh | tail | tabulate -f pipe | prism -l llvm"
+
+alias fbdir="du -cks * | sort -rn | head | tabulate -f pipe | prism -l llvm"
+
+alias plasma='cd /home/ckm/Documents/school/plasma/'
+
+alias ff='ffmpeg -filters | prism -l llvm'
+
+alias zotero='./home/ckm/Downloads/Zotero_linux-x86_64/zotero'
+
+alias vid2term="cat $n | xargs -P 0 -I "x" mplayer -vo caca "x""
+# use | prism -l <color>
+# to change the tonemap
+
+alias xymdump='xymonq -q clientlog | prism -l nix'
+
+# bits2vid(){
+#     bitstream=/dev/urandom
+#     input=${1:bitstream}
+#     lang_color=cmake
+#     color=${2:lang_color}
+#     cat -s -A $input | xxd -b -c 1 | xargs -P 0 -I'{}' ffmpeg -f rawvideo -pix_fmt gray -s:800x600 -i '{}'  -f matroska - | mplayer -vo caca - | prism -l $color
+#     }
+
+
+# file2vid(){
+#     bitstream=/dev/urandom
+#     input=${1:bitstream}
+#     lang_color=cmake
+#     color=${2:lang_color}
+#     cat -s -A $input | xargs -P 0 -I'{}' ffmpeg -f rawvideo -pix_fmt gray -s:800x600 -i '{}'  -f matroska - | mplayer -vo caca - | prism -l $color
+#     }
+
+alias new_script='/home/ckm/scripts/new_script.sh '
+
+alias rc='emacs ~/.bashrc'
+
+alias gimp_scripts='/home/ckm/.var/app/org.gimp.GIMP/config/GIMP/2.10/plug-ins/ '
+
+alias mkmusic='cat -s -A $n | xxd -EBCDIC -c 255 | pv -p -t -e -r -b -T -A 128 -E | qplay -r 44000 | aplay -f dat -c 1 '
+
+# tr -d [ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz] 
+
+# 'on' sets octave to n [0,6]
+# change octave <>
+# notes are ABCDEFG
+# can be #/+ (sharp) - (flat)
+# duration of note Ln [1,64]
+# P n pause for [1,64]
+# . (suspend)
+
+#alias awkascii="awk 'BEGIN { for(i=32;i<127;i++) printf "%c",i; print }'"
+
+alias bashascii='for ((i=32;i<127;i++)) do printf "\\$(printf %03o "$i")"; done; printf "\n"'
+
+alias pyascii="python -c 'import string; print(string.printable)'"
+
+
+alias scripts="cd ~/scripts"
+
+
+# implement file - byte alias residual 
+
+# meta, markup, css, clike, javascript, abap, abnf, actionscript, ada, agda, al, antlr4, apacheconf, apex, apl, applescript, aql, arduino, arff, asciidoc, aspnet, asm6502, autohotkey, autoit, bash, basic, batch, bbcode, birb, bison, bnf, brainfuck, brightscript, bro, bsl, c, csharp, cpp, cil, clojure, cmake, coffeescript, concurnas, csp, crystal, css-extras, cypher, d, dart, dataweave, dax, dhall, diff, django, dns-zone-file, docker, ebnf, editorconfig, eiffel, ejs, elixir, elm, etlua, erb, erlang, excel-formula, fsharp, factor, firestore-security-rules, flow, fortran, ftl, gml, gcode, gdscript, gedcom, gherkin, git, glsl, go, graphql, groovy, haml, handlebars, haskell, haxe, hcl, hlsl, http, hpkp, hsts, ichigojam, icon, ignore, inform7, ini, io, j, java, javadoc, javadoclike, javastacktrace, jolie, jq, jsdoc, js-extras, json, json5, jsonp, jsstacktrace, js-templates, julia, keyman, kotlin, latex, latte, less, lilypond, liquid, lisp, livescript, llvm, lolcode, lua, makefile, markdown, markup-templating, matlab, mel, mizar, mongodb, monkey, moonscript, n1ql, n4js, nand2tetris-hdl, naniscript, nasm, neon, nginx, nim, nix, nsis, objectivec, ocaml, opencl, oz, parigp, parser, pascal, pascaligo, pcaxis, peoplecode, perl, php, phpdoc, php-extras, plsql, powerquery, powershell, processing, prolog, promql, properties, protobuf, pug, puppet, pure, purebasic, purescript, python, q, qml, qore, r, racket, jsx, tsx, reason, regex, renpy, rest, rip, roboconf, robotframework, ruby, rust, sas, sass, scss, scala, scheme, shell-session, smali, smalltalk, smarty, sml, solidity, solution-file, soy, sparql, splunk-spl, sqf, sql, stan, iecst, stylus, swift, t4-templating, t4-cs, t4-vb, tap, tcl, tt2, textile, toml, turtle, twig, typescript, typoscript, unrealscript, vala, vbnet, velocity, verilog, vhdl, vim, visual-basic, warpscript, wasm, wiki, xeora, xml-doc, xojo, xquery, yaml, yang, zig
+
+
+# #alais.sh
+# findreplace(){
+#     printf "Search: ${1}\n"
+#     printf "Replace: ${2}\n"
+#     printf "In: ${3}\n\n"
+ 
+#     find . -name "*${3}" -type f | xargs perl -pi -e 's/${1}/${2}/g'
+# }
+
+
+
+# # Show current network information
+# netinfo ()
+# {
+# 	echo "--------------- Network Information ---------------"
+# 	/sbin/ifconfig | awk /'inet addr/ {print $2}'
+# 	echo ""
+# 	/sbin/ifconfig | awk /'Bcast/ {print $3}'
+# 	echo ""
+# 	/sbin/ifconfig | awk /'inet addr/ {print $4}'
+
+# 	/sbin/ifconfig | awk /'HWaddr/ {print $4,$5}'
+# 	echo "---------------------------------------------------"
+# }
+
+# # IP address lookup
+# alias whatismyip="whatsmyip"
+# function whatsmyip ()
+# {
+# 	# Dumps a list of all IP addresses for every device
+# 	# /sbin/ifconfig |grep -B1 "inet addr" |awk '{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }' |awk -F: '{ print $1 ": " $3 }';
+
+# 	# Internal IP Lookup
+# 	echo -n "Internal IP: " ; /sbin/ifconfig eth0 | grep "inet addr" | awk -F: '{print $2}' | awk '{print $1}'
+
+# 	# External IP Lookup
+# 	echo -n "External IP: " ; wget http://smart-ip.net/myip -O - -q
+# }
+
+
+# env set up for subuser
+export PATH=$HOME/.subuser/bin:$PATH
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

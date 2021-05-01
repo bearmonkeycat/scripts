@@ -1,0 +1,329 @@
+;; -----------------------------------------------------------------------------
+;;
+;; [ FILE ] Emacs customization file
+;; [ NAME ] .emacs
+;; [ PATH ] ~/.emacs
+;; [ SRCL ] https://gist.github.com/btskinner/d6bb7131fb4b20e6db31
+;;
+;; -----------------------------------------------------------------------------
+
+;; -- ENVIRONMENT ------------------------------------------
+
+(unless (getenv "LANG") (setenv "LANG" "en_US.UTF-8"))
+(setq default-directory "~/" )
+
+(add-to-list 'load-path "~/linum-highlight-current-line-number")
+
+;; -- PACKAGES (MELPA) -------------------------------------
+
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/") t)
+(package-initialize)
+
+;; -- THEME AND VISUAL SETTINGS ----------------------------
+
+;; high-contrast zenburn theme (melpa)
+(load-theme 'spacegray t)
+
+;; no tool bar
+(tool-bar-mode 0)
+
+;; scroll bars
+(scroll-bar-mode t)
+
+;; no start up message
+(setq inhibit-startup-message t)
+(setq initial-scratch-message "")
+
+;; removes *messages* from the buffer
+(setq-default message-log-max nil)
+(kill-buffer "*Messages*")
+
+;; Removes *Completions* from buffer
+;; (add-hook 'minibuffer-exit-hook
+;; 	  '(lambda ()
+;; 	     (let ((buffer "*Completions*"))
+;; 	       (and (get-buffer buffer)
+;; 		    (kill-buffer buffer)))))
+
+;; no audible or visual bell when emacs is mad
+(setq ring-bell-function 'ignore)
+
+;; font size
+(set-face-attribute 'default nil :height 160)
+
+
+;; turn on line and column numbers
+(setq display-line-number-mode t)
+(setq column-number-mode t)
+;;(setq linum-format "%2d \u2502 ")
+(require 'linum-highlight-current-line-number)
+(setq linum-format 'linum-highlight-current-line-number)
+;;(setq nlinum-highlight-current-line t)
+
+;; default frame size
+(add-to-list 'default-frame-alist '(width . 120)
+	     '(height . 80))
+
+(setq-default left-fringe-width 1)
+(setq-default right-fringe-width 1)
+
+;; unique buffer names (with directory)
+(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+
+;; correct shell path
+(setq explicit-shell-file-name "/usr/local/bin/bash")
+(define-key global-map (kbd "C-M-t")
+  (lambda () (interactive) (term explicit-shell-file-name)))
+
+;; -- GENERAL SETTINGS -------------------------------------
+
+;; SPELLING (brew install hunspell)
+;; (setq-default ispell-program-name "/usr/local/bin/hunspell")
+;; (setq ispell-really-hunspell t)
+
+;; use the tab key to make 4 spaces
+(setq tab-width 4)
+(setq indent-tabs-mode nil)
+
+;; no backup~ files
+(setq make-backup-files t)
+
+;; no #autosave# files
+(setq auto-save-default nil)
+
+;; allow upcase (C-x C-u) and downcase (C-x C-l) region
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+
+;; -- OTHER KEY BINDINGS/MODIFICATIONS ---------------------
+
+;; jump to other window (split screen)
+(global-set-key [C-tab] 'other-window)
+
+;; jump to other frame (split window)
+(global-set-key (kbd "C-\`") 'other-frame)
+
+
+;; -- MODES ------------------------------------------------
+
+;; -- STATA --------
+
+
+;; -- R ------------
+
+
+;; -- Markdown -----
+
+(autoload 'markdown-mode "markdown-mode"
+   "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist
+             '("\\.md" . markdown-mode))
+(autoload 'gfm-mode "markdown-mode"
+   "Major mode for editing GitHub Flavored Markdown files" t)
+(add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
+
+;; open current file in Marked 2
+(defun markdown-preview-file ()
+  "use Marked 2 to preview the current file"
+  (interactive)
+  (shell-command 
+   (format "open -a 'Marked 2.app' %s" 
+       (shell-quote-argument (buffer-file-name))))
+)
+(global-set-key "\C-cm" 'markdown-preview-file)
+
+(add-hook 'markdown-mode-hook 'pandoc-mode)
+(add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
+
+;; -- LaTeX --------
+
+;; set LaTeX engine
+(setq TeX-engine (quote xetex))
+
+;; save when compiling
+(setq TeX-save-query nil)
+
+;; add synctex
+(setq LaTeX-command "pdflatex -synctex=1")
+
+;; auctex parse on load and save
+(setq tex-parse-self t)
+(setq tex-auto-save t)
+
+(setq TeX-command-list
+   (quote
+    (("LaTeX" "%`%l%(mode)%' %t" TeX-run-TeX nil
+      (latex-mode doctex-mode) :help "Run LaTeX")
+     ("BibTeX" "bibtex %s" TeX-run-BibTeX nil t :help "Run BibTeX")
+     ("Biber" "biber %s" TeX-run-Biber t t :help "Run Biber")
+     ("View" "%V" TeX-run-discard-or-function nil t :help "Run Viewer"))))
+
+;; set default TeX command
+(setq TeX-command-default "xelatex")
+
+
+;; only change sectioning colour
+(setq font-latex-fontify-sectioning 'color)
+
+;; super-/sub-script on baseline
+(setq font-latex-script-display (quote (nil)))
+
+;; -- Other --------
+
+;; no Flymake
+(setq ess-use-flymake nil)
+
+;; Macros indent in C/C++ code
+(c-set-offset (quote cpp-macro) 0 nil)
+
+;; Stan mode
+(require 'stan-mode)
+
+;; -- FUNCTIONS --------------------------------------------
+
+;; replace smart quotes (h/t https://superuser.com/a/604264)
+(defun replace-smart-quotes (beg end)
+  "Replace 'smart quotes' in buffer or region with ascii quotes."
+  (interactive "r")
+  (format-replace-strings '(("\x201C" . "\"")
+                            ("\x201D" . "\"")
+                            ("\x2018" . "'")
+                            ("\x2019" . "'"))
+                          nil beg end))
+
+;; do not change super-/sub-script font
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(font-latex-subscript-face ((t nil)))
+ '(font-latex-superscript-face ((t nil)))
+ '(fringe ((t (:background "dim gray"))))
+ '(linum-current-line-number-face ((t (:inherit linum :background "gray35" :foreground "goldenrod" :inverse-video t :weight ultra-bold :width expanded)))))
+
+;; exclude bold/italic from keywords
+(setq font-latex-deactivated-keyword-classes
+      '("italic-command"
+	"bold-command"
+	"italic-declaration"
+	"bold-declaration"))
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default bold shadow italic underline bold bold-italic bold])
+ '(ansi-color-names-vector
+   (vector "#ffffff" "#bf616a" "#B4EB89" "#ebcb8b" "#89AAEB" "#C189EB" "#89EBCA" "#232830"))
+ '(beacon-color "#F8BBD0")
+ '(column-number-mode t)
+ '(cua-mode t nil (cua-base))
+ '(custom-enabled-themes (quote (classic)))
+ '(custom-safe-themes
+   (quote
+    ("179561378080af1e960d4fef173c0879c77fb4a4ac3569c044880f005abfc2be" "8c01cb4cf9ee298d30a0456b1e90c575d8f5a047e35a5380a5f955c59ed17d2f" "f544e09cb6c2a1047a751bcf5623ad70eb45981847b1c673263ce7de4858ae6b" "7de0917b4064219c0580397495d47b89a5f93d76724504d0ea8d2eea83542167" "a0feb1322de9e26a4d209d1cfa236deaf64662bb604fa513cca6a057ddf0ef64" "5e3fc08bcadce4c6785fc49be686a4a82a356db569f55d411258984e952f194a" "c7eb06356fd16a1f552cfc40d900fe7326ae17ae7578f0ef5ba1edd4fdd09e58" "c3c39b9bf9824d4fa591fbf785a2cb507607f2f36fef05363d6f2dca5c6db82b" "a6473f7abf949f4a6a1a9cc0dd37ea2e35ba3cea65d3442b98d65c5c5c5cb8d7" "fe36e4da2ca97d9d706e569024caa996f8368044a8253dc645782e01cd68d884" "36ca8f60565af20ef4f30783aa16a26d96c02df7b4e54e9900a5138fb33808da" "bf798e9e8ff00d4bf2512597f36e5a135ce48e477ce88a0764cfb5d8104e8163" "3d4df186126c347e002c8366d32016948068d2e9198c496093a96775cc3b3eaa" "c3e6b52caa77cb09c049d3c973798bc64b5c43cc437d449eacf35b3e776bf85c" "b6f06081b007b57be61b82fb53f27315e2cf38fa690be50d6d63d2b62a408636" "2681c80b05b9b972e1c5e4d091efb9ba7bb5fa7dad810d9026bc79607a78f1c0" "8f0a91a1df558a0f6891b9d31bb012ffd2c620caa1a409656a77b96e0ec886a9" "8426618fcc55f670f45b04f146933ae23caa1faad603a380e7a348660fd225ab" "f4bea884585d6af41a46803fde08b82c2874848d8932719b65d47ff8493378a1" "4eb69f17b4fa0cd74f4ff497bb6075d939e8d8bf4321ce8b81d13974000baac1" "b8c5adfc0230bd8e8d73450c2cd4044ad7ba1d24458e37b6dec65607fc392980" "92b9029ec675514ea26e3c9677ada1fb578d3a83b912c297acc4903fa709f9d6" "c560237b7505f67a271def31c706151afd7aa6eba9f69af77ec05bde5408dbcd" default)))
+ '(diary-entry-marker (quote font-lock-variable-name-face))
+ '(diff-hl-show-hunk-posframe-internal-border-color "#ffffffffffff")
+ '(display-battery-mode t)
+ '(emms-mode-line-icon-color "#1fb3b3")
+ '(evil-emacs-state-cursor (quote ("#D50000" hbar)))
+ '(evil-insert-state-cursor (quote ("#D50000" bar)))
+ '(evil-normal-state-cursor (quote ("#F57F17" box)))
+ '(evil-visual-state-cursor (quote ("#66BB6A" box)))
+ '(fci-rule-color "#343d46")
+ '(font-use-system-font t)
+ '(frame-background-mode nil)
+ '(global-linum-mode t)
+ '(gnus-logo-colors (quote ("#528d8d" "#c0c0c0")))
+ '(gnus-mode-line-image-cache
+   (quote
+    (image :type xpm :ascent center :data "/* XPM */
+static char *gnus-pointer[] = {
+/* width height num_colors chars_per_pixel */
+\"    18    13        2            1\",
+/* colors */
+\". c #1fb3b3\",
+\"# c None s None\",
+/* pixels */
+\"##################\",
+\"######..##..######\",
+\"#####........#####\",
+\"#.##.##..##...####\",
+\"#...####.###...##.\",
+\"#..###.######.....\",
+\"#####.########...#\",
+\"###########.######\",
+\"####.###.#..######\",
+\"######..###.######\",
+\"###....####.######\",
+\"###..######.######\",
+\"###########.######\" };")))
+ '(highlight-indent-guides-auto-enabled nil)
+ '(highlight-symbol-colors
+   (quote
+    ("#F57F17" "#66BB6A" "#0097A7" "#42A5F5" "#7E57C2" "#D84315")))
+ '(highlight-symbol-foreground-color "#546E7A")
+ '(highlight-tail-colors (quote (("#F8BBD0" . 0) ("#FAFAFA" . 100))))
+ '(hl-paren-colors
+   (quote
+    ("#B9F" "#B8D" "#B7B" "#B69" "#B57" "#B45" "#B33" "#B11")))
+ '(package-selected-packages
+   (quote
+    (helm-codesearch helm-describe-modes helm-ext helm-file-preview helm-proc helm-shell-history helm-searcher helm-selector helm-themes helm-systemd helm-system-packages liso-theme load-theme-buffer-local numpydoc pcsv pastelmac-theme paradox pandoc professional-theme pungi py-isort py-smart-operator py-test py-yapf pydoc pygen pyimport pyimpsort pylint python python-docstring python-switch-quotes python-x pythonic python-test python-pytest python-info qtcreator-theme regex-tool reverse-theme shfmt simple-screen sketch-themes smart-mode-line solo-jazz-theme sort-words soria-theme sos soundklaus space-theming spaceline spacemacs-theme sphinx-doc sr-speedbar ssh-config-mode stimmung-themes string-utils stripe-buffer stripes subatomic256-theme subatomic-theme subemacs sublimity sudo-ext sudo-utils sunny-day-theme suggest sunburn-theme suscolors-theme sweet-theme sxiv sx tao-theme syntactic-close tab-group sysctl systemd tNFA tabbar-ruler tagedit tangotango-theme telephone-line theme-anchor thingopt timp tiny-menu tmux-pane toggle-quotes toggle-window toxi-theme treeview turnip twilight-bright-theme twilight-anti-bright-theme uimage undersea-theme uncrustify-mode unipoint unicode-math-input undo-fu undo-propose undohist use-package which-key ws-butler xclip xonsh-mode zen-and-art-theme zerodark-theme zimports zotelo ztree zweilight-theme link iodine-theme helm-open-github ham-mode habamax-theme hackernews guru-mode gsnip gscholar-bibtex gruvbox-theme grizzl greymatters-theme grayscale-theme green-is-the-new-black-theme green-screen-theme golden-ratio gnuplot-mode gnuplot fit-text-scale fira-code-mode fastnav fast-scroll face-explorer eziam-theme exotica-theme ewal eterm-256color esup esonify epm emamux elpygen el-init ein-mumamo eink-theme egg edit-color-stamp colorless-themes color-theme-approximate cloud-theme clipmon berrys-theme airline-themes ac-capf ac-math comb context-coloring config-general-mode config-parser constant-theme cheat-sh cheatsheet char-menu camcorder calmer-forest-theme cache buttons button-lock burly build-helper buffer-flip buffer-utils blackboard-bold-mode cabledolphin bubbleberry-theme browse-kill-ring bpr boron-theme bind-key bibclean-format bibtex-actions bibtex-utils bibliothek bibslurp bibtex-completion blimp bliss-theme blacken blackboard-theme bind-map bibretrieve benchmark-init basic-theme ace-popup-menu aas auto-auto-indent asx arjen-grey-theme apropospriate-theme anyins annalist ample-theme ample-zen-theme ample-regexps all alect-themes aggressive-indent ace-link ac-html abyss-theme abl-mode 0blayout dream-theme multiple-cursors jeison python-mode python-modee jedi-direx elpy ein ## helm color-theme-modern zenburn-theme undo-tree textx-mode stan-mode spacegray-theme poly-R pandoc-mode org-preview-html nlinum-hl melpa-upstream-visit math-preview material-theme linum-off latex-unicode-math-mode latex-preview-pane latex-pretty-symbols latex-math-preview latex-extra jupyter jedi jazz-theme grip-mode flymd ess cdlatex auctex-latexmk auctex-cluttex annotation ado-mode)))
+ '(pos-tip-background-color "#ffffffffffff")
+ '(pos-tip-foreground-color "#78909C")
+ '(ps-use-face-background nil)
+ '(save-place-mode t)
+ '(show-paren-mode t)
+ '(size-indication-mode t)
+ '(tabbar-background-color "#ffffffffffff")
+ '(tool-bar-position (quote top))
+ '(vc-annotate-background nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#bf616a")
+     (40 . "#DCA432")
+     (60 . "#ebcb8b")
+     (80 . "#B4EB89")
+     (100 . "#89EBCA")
+     (120 . "#89AAEB")
+     (140 . "#C189EB")
+     (160 . "#bf616a")
+     (180 . "#DCA432")
+     (200 . "#ebcb8b")
+     (220 . "#B4EB89")
+     (240 . "#89EBCA")
+     (260 . "#89AAEB")
+     (280 . "#C189EB")
+     (300 . "#bf616a")
+     (320 . "#DCA432")
+     (340 . "#ebcb8b")
+     (360 . "#B4EB89"))))
+ '(vc-annotate-very-old-color nil))
+
+
+;; Standard Jedi.el setting
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot 1)
+(add-hook 'python-mode-hook 'jedi:ac-setup)
+;; (setq split-width-threshold 0)
+;; (setq split-height-threshold nil)
+;; (setq pop-up-windows nil)
+;; (setq pop-up-frames 1)
+(setq python-shell-interpreter "ipython"
+      python-shell-interpreter-args "-i --simple-prompt")
+;; Type:
+;;     M-x package-install RET jedi RET
+;;     M-x jedi:install-server RET
+;; Then open Python file.
+
+;; -----------------------------------------------------------------------------
+;; END FILE
+;; -----------------------------------------------------------------------------
+
+

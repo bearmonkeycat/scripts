@@ -1,0 +1,466 @@
+"
+" VIM configuration file [RunCom] 
+"                                  
+"
+"tin=https://github.com/amix/vimrc
+
+" configure settings
+set history=1000
+set nocompatible
+set hidden
+set encoding=utf-8
+set showtabline=0
+set term=xterm
+set t_ti= t_te=
+
+
+" airline config
+filetype plugin on
+filetype indent on
+let g:airline#extensions#tagbar#enabled = 1
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.crypt = '🔒'
+let g:airline_symbols.linenr = '☰'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.maxlinenr = '㏑'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.spell = 'Ꞩ'
+let g:airline_symbols.notexists = 'Ɇ'
+let g:airline_symbols.whitespace = 'Ξ'
+
+" powerline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = '☰'
+let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.dirty='⚡'
+
+" old vim-powerline symbols
+let g:airline_left_sep = '⮀'
+let g:airline_left_alt_sep = '⮁'
+let g:airline_right_sep = '⮂'
+let g:airline_right_alt_sep = '⮃'
+let g:airline_symbols.branch = '⭠'
+let g:airline_symbols.readonly = '⭤'
+let g:airline_symbols.linenr = '⭡'
+
+let g:airline_detect_paste=1
+let g:airline_detect_spell=1
+let g:airline_statusline_ontop = 1
+let g:airline_theme='dark'
+
+let g:airline#extension#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+
+let g:airline_powerline_fonts = 1
+let g:airline_highlighting_cache = 1
+let g:airline#extensions#bufferline#enabled = 1
+
+" more keyboard mapping combinations 
+let mapleader = '\'
+
+
+
+
+
+
+
+
+" Create default mappings
+" let g:NERDCreateDefaultMappings = 1
+" Add spaces after comment delimiters by default
+" let g:NERDSpaceDelims = 1
+" Use compact syntax for prettified multi-line comment
+" let g:NERDCompactSexyComs = 1
+" Align line-wise comment delimiters flush left instead of following code indentation
+" let g:NERDDefaultAlign = 'left'
+" Set a language to use its alternate delimiters by default
+" let g:NERDAltDelims_java = 1
+" Add your own custom formats or override the defaults
+" let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+" Allow commenting and inverting empty lines (useful when commenting a region)
+" let g:NERDCommentEmptyLines = 1
+" Enable trimming of trailing whitespace when uncommenting
+" let g:NERDTrimTrailingWhitespace = 1
+" Enable NERDCommenterToggle to check all selected lines is commented or not
+" let g:NERDToggleCheckAllLines = 1
+" vmap <Leader>/ <Plug>VisualFirstLine
+
+
+
+
+
+
+
+" n       Normal mode and Terminal modes
+		" v       Visual mode
+		" i       Insert mode
+		" c       Command-line mode
+		" h       all previous modes when editing a help file
+		" a       all previous modes
+		" r       for hit-enter and more-prompt prompt
+" Normally you would enable the mouse in all five modes with:
+
+
+set mouse=n
+" inoremap <ScrollWheelUp> <Nop>
+" inoremap <ScrollWheelDown> <Nop>
+" If your terminal can't overrule the mouse events going to the
+	" application, use:
+" set mouse=nvi
+" if &term =~ "xterm"
+    " let &t_ti = "\<Esc>[?47h"
+    " let &t_te = "\<Esc>[?47l"
+" endif
+
+
+" viz.
+nmap <leader>w :w!<cr>
+
+" :W sudo saves the file
+" (useful for handling the permission-denied error)
+command! W execute 'w !sudo tee % > /dev/null' <bar> edit!
+
+
+"gg=G is a formatting code sequence too
+"setting this to
+"set wildmenu
+"set wildmode=longest:list,full
+"will enable fun interaction
+"and :set wildmode=list:longest
+"is an other option
+
+"set wildmenu
+"set wildmode=longest:full,full
+
+
+let g:airline#extensions#bufferline#enabled = 1
+
+set nocompatible
+set hidden
+set encoding=utf-8
+set showtabline=0
+
+
+
+
+" :help ctrlspace
+" hi CtrlSpaceSearch guifg=#cb4b16 guibg=NONE gui=bold ctermfg=9 ctermbg=NONE term=bold cterm=bold
+
+" let g:CtrlSpaceLoadLastWorkspaceOnStart = 1
+" let g:CtrlSpaceSaveWorkspaceOnSwitch = 1
+" let g:CtrlSpaceSaveWorkspaceOnExit = 1
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+
+
+
+
+let g:syntastic_python_checkers = ['pylint']
+
+
+
+" airline settings
+"
+" let g:airline_section_a       (mode, crypt, paste, spell, iminsert)
+" let g:airline_section_b       (hunks, branch)[*]
+" let g:airline_section_c       (bufferline or filename, readonly)
+" let g:airline_section_gutter  (csv)
+" let g:airline_section_x       (tagbar, filetype, virtualenv)
+" let g:airline_section_y       (fileencoding, fileformat)
+" let g:airline_section_z       (percentage, line number, column number)
+" let g:airline_section_error   (ycm_error_count, syntastic-err, eclim,
+"                                languageclient_error_count)
+" let g:airline_section_warning (ycm_warning_count, syntastic-warn,
+"                                languageclient_warning_count, whitespace)
+" 
+" [*] This section needs at least the fugitive extension or else
+"     it will remain empty
+"
+" here is an example of how you could replace the branch indicator with
+" the current working directory (limited to 10 characters),
+" followed by the filename.
+let g:airline_section_b = '%-0.10{getcwd()}'
+let g:airline_section_c = '%t'
+
+let g:airline#extensions#ctrlspace#enabled = 1
+let g:CtrlSpaceStatuslineFunction = "airline#extensions#ctrlspace#statusline()"
+let g:airline#extensions#branch#enabled = 1
+
+let g:airline#extensions#csv#enabled = 1
+let g:airline#extensions#csv#column_display = 'Number'  " (default)
+let g:airline#extensions#csv#column_display = 'Name'
+
+let g:airline#extensions#ctrlp#color_template = 'insert'  " (default)
+let g:airline#extensions#ctrlp#color_template = 'normal'
+let g:airline#extensions#ctrlp#color_template = 'visual'
+let g:airline#extensions#ctrlp#color_template = 'replace'
+
+
+let g:airline#extensions#cursormode#enabled = 1
+
+" syntastic <https://github.com/vim-syntastic/syntastic>
+" * enable/disable syntastic integration >
+let g:airline#extensions#syntastic#enabled = 1
+
+" Note: The recommendation from syntastic to modify the statusline directly
+" does not apply, if you use vim-airline, since it will take care for you of
+" adjusting the statusline.
+
+" * syntastic error_symbol >
+let airline#extensions#syntastic#error_symbol = 'E:'
+" * syntastic statusline error format (see |syntastic_stl_format|) >
+let airline#extensions#syntastic#stl_format_err = '%E{[%fe(#%e)]}'
+
+" * syntastic warning >
+let airline#extensions#syntastic#warning_symbol = 'W:'
+" * syntastic statusline warning format (see |syntastic_stl_format|) >
+let airline#extensions#syntastic#stl_format_warn = '%W{[%fw(#%w)]}'
+
+let g:airline#extensions#whitespace#enabled = 1
+
+" * disable detection of whitespace errors. >
+" useful to call for particular file types (e.g., in "ftplugin/*")
+silent! call airline#extensions#whitespace#disable()
+
+" * customize the type of mixed indent checking to perform. >
+" must be all spaces or all tabs before the first non-whitespace character
+" let g:airline#extensions#whitespace#mixed_indent_algo = 0 "(default)
+
+" certain number of spaces are allowed after tabs, but not in between
+" this algorithm works well for /* */ style comments in a tab-indented file
+" let g:airline#extensions#whitespace#mixed_indent_algo = 1
+
+" spaces are allowed after tabs, but not in between
+" this algorithm works well with programming styles that use tabs for
+" indentation and spaces for alignment
+" let g:airline#extensions#whitespace#mixed_indent_algo = 2
+
+" * customize the whitespace symbol. >
+" let g:airline#extensions#whitespace#symbol = '!'
+
+" indent: mixed indent within a line
+" long:   overlong lines
+" trailing: trailing whitespace
+" mixed-indent-file: different indentation in different lines
+" conflicts: checks for conflict markers
+let g:airline#extensions#whitespace#checks =  [ 'indent', 'trailing', 'long', 'mixed-indent-file', 'conflicts' ]
+
+" this can also be configured for an individual buffer
+let b:airline_whitespace_checks = [ 'indent', 'trailing', 'long', 'mixed-indent-file', 'conflicts' ]
+" * \cconfigure the max number of lines where whitespace checking is enabled. >
+let g:airline#extensions#whitespace#max_lines = 20000
+" * configure whether a message should be displayed. >
+let g:airline#extensions#whitespace#show_message = 1
+" * configure the formatting of the warning messages. >
+let g:airline#extensions#whitespace#trailing_format = 'trailing[%s]'
+let g:airline#extensions#whitespace#mixed_indent_format = 'mixed-indent[%s]'
+let g:airline#extensions#whitespace#long_format = 'long[%s]'
+let g:airline#extensions#whitespace#mixed_indent_file_format = 'mix-indent-file[%s]'
+let g:airline#extensions#whitespace#conflicts_format = 'conflicts[%s]'
+
+" * configure custom trailing whitespace regexp rule >
+let g:airline#extensions#whitespace#trailing_regexp = '\s$'
+
+" * configure, which filetypes have special treatment of /* */ comments,
+" matters for mix-indent-file algorithm: >
+let airline#extensions#c_like_langs = ['arduino', 'c', 'cpp', 'cuda', 'go', 'javascript', 'ld', 'php']
+" * disable whitespace checking for an individual buffer >
+" Checking is enabled by default because b:airline_whitespace_disabled
+" is by default not defined:
+"let b:airline_whitespace_disabled
+
+" If b:airline_whitespace_disabled is defined and is non-zero for a buffer,
+" then whitespace checking will be disabled for that buffer; for example:
+" let b:airline_whitespace_disabled = 1
+
+
+" * disable specific whitespace checks for individual filetypes >
+ " The global variable g:airline#extensions#whitespace#skip_indent_check_ft
+ " defines what whitespaces checks to skip per filetype.
+ " the list can contain any of the available checks,
+ " (see above at g:airline#extensions#whitespace#checks)
+ " To disable mixed-indent-file for go files use:
+ " let g:airline#extensions#whitespace#skip_indent_check_ft =  {'go': ['mixed-indent-file']}
+
+
+" \c  enable/disable YCM integration >
+" let g:airline#extensions#ycm#enabled = 1
+
+" * set error count prefix >
+let g:airline#extensions#ycm#error_symbol = 'E:'
+
+" * set warning count prefix >
+let g:airline#extensions#ycm#warning_symbol = 'W:'
+
+
+"
+"
+"
+" vim-plug setup
+"
+call plug#begin()
+" Make sure you use single quotes
+Plug 'dense-analysis/ale'
+
+" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
+" Plug 'junegunn/vim-easy-align'
+" Plug 'tmhedberg/simpylfold'
+
+" Any valid git URL is allowed
+"Plug 'https://github.com/junegunn/vim-github-dashboard.git'
+
+" Multiple Plug commands can be written in a single line using | separators
+Plug 'SirVer/ultisnips' 
+" Plug 'honza/vim-snippets'
+
+" On-demand loading
+" Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+"Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+
+" Using a non-default branch
+"Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
+
+" Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
+"Plug 'fatih/vim-go', { 'tag': '*' }
+
+" Plugin options
+"Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
+
+" Plugin outside ~/.vim/plugged with post-update hook
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+"Plug 'jpalardy/vim-slime', { 'for': 'python' }
+"Plug 'hanschen/vim-ipython-cell', { 'for': 'python' }
+"Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+"Plug 'szymonmaszke/vimpyter'
+" Plug 'jupyter-vim/jupyter-vim'
+
+" vim-plug with on-demand
+" Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
+"Plug 'jeetsukumaran/vim-pythonsense'
+Plug 'skywind3000/vim-preview'
+Plug 'skywind3000/vim-quickui'
+" Plug 'romgrk/winteract.vim'
+" Plug 'yuttie/comfortable-motion.vim'
+Plug 'iamcco/mathjax-support-for-mkdp'
+"Plug 'petRUShka/vim-sage'
+Plug 'mhinz/vim-startify'
+"Plug 'dbsr/vimpy'
+
+"headlights (needs python 2 support
+"Plug 'mbadran/headlights'
+
+
+"tmux
+
+"Plug 'wellle/tmux-complete.vim'
+"let g:tmuxcomplete#trigger = 'completefunc'
+"let g:tmuxcomplete#trigger = 'omnifunc'
+
+" Plug 'prabirshrestha/async.vim'
+" Plug 'prabirshrestha/asyncomplete.vim'
+" let g:tmuxcomplete#asyncomplete_source_options = {
+            " \ 'name':      'tmuxcomplete',
+            " \ 'whitelist': ['*'],
+            " \ 'config': {
+            " \     'splitmode':      'words',
+            " \     'filter_prefix':   1,
+            " \     'show_incomplete': 1,
+            " \     'sort_candidates': 0,
+            " \     'scrollback':      0,
+            " \     'truncate':        0
+            " \     }
+            " \ }
+
+
+"braceless
+Plug 'tweekmonster/braceless.vim'
+autocmd FileType python BracelessEnable +indent
+
+" Initialize plugin system
+call plug#end()
+
+
+
+
+
+"
+"
+"
+" utilisnipits
+"
+" Trigger configuration. You need to change this to something other than <tab> if you use one of the following:
+" - https://github.com/Valloric/YouCompleteMe
+" - https://github.com/nvim-lua/completion-nvim
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" If you want :UltiSnipsEdit to split your window.
+" let g:UltiSnipsEditSplit="vertical"
+
+
+" clear terminal after quitting vim
+"au VimLeave * !echo -ne "\033[0m"
+
+
+
+
+
+
+
+"
+"
+"
+"
+"vimpy stuf
+"
+"autocmd Filetype ipynb nmap <silent><Leader>b :VimpyterInsertPythonBlock<CR>
+"autocmd Filetype ipynb nmap <silent><Leader>j :VimpyterStartJupyter<CR>
+" g:vimpyter_color 1
+
+
+
+
+
+"
+"
+"
+" jedi stuff
+"
+" g:jedi#completions_commandi <CTRL-SPACE>
+" g:jedi#auto_initialization 1
+" g:jedi#completions_enabled 1
+" g:jedi#smart_auto_mappings 1
+" g:jedi#show_call_signatures_delay 100`
+" g:jedi#popup_on_dot 1
+" g:jedi#auto_vim_configuration 1
+" g:jedi#documentation_command
+" g:jedi#usages_command 1
+"jedi#py_import(args)
+":Pyimport os,sys,subprocess,numpy as np, matplotlib.pyplot as plt, astropy, scipy, plasmapy:w
+"g:jedi#show_call_signatures 1
